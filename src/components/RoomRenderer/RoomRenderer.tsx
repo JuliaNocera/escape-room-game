@@ -4,8 +4,8 @@ import RoomContext from "../RoomContext";
 
 const RoomRenderer = () => (
   <RoomContext.Consumer>
-    {({rooms, currentRoom}) => (
-    <> {rooms[currentRoom].renderer}</>
+    {({ currentRoom }) => (
+    <> {currentRoom.renderer}</>
     )}
   </RoomContext.Consumer>
 );

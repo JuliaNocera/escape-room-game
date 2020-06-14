@@ -1,17 +1,25 @@
 import React, { PropsWithChildren } from "react";
 
-import RoomContext, { RoomContextProps } from "../RoomContext";
+import RoomContext, { Room } from "../RoomContext";
+
+interface RoomProviderProps {
+  rooms: Room[]
+  currentRoomIndex: number
+  goToRoom: (roomIndex: number) => void;
+  nextRoom: () => void;
+  prevRoom: () => void;
+}
 
 const RoomProvider = ({
   rooms,
-  currentRoom,
+  currentRoomIndex,
   goToRoom,
   nextRoom,
   prevRoom,
   children,
-}: PropsWithChildren<RoomContextProps>) => (
+}: PropsWithChildren<RoomProviderProps>) => (
   <RoomContext.Provider
-    value={{ rooms, currentRoom, goToRoom, nextRoom, prevRoom }}
+    value={{ rooms, currentRoom: rooms[currentRoomIndex], currentRoomIndex, goToRoom, nextRoom, prevRoom }}
   >
     {children}
   </RoomContext.Provider>

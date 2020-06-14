@@ -5,10 +5,10 @@ import RoomContext from '../RoomContext';
 const RoomTwo = () => {
   return (
     <RoomContext.Consumer>
-      {({ rooms, currentRoom, nextRoom }) => {
+      {({ currentRoom, nextRoom }) => {
         return (
           <div>
-            <h1>{rooms[currentRoom].displayName}</h1>
+            <h1>{currentRoom.displayName}</h1>
             <button onClick={nextRoom} > Next Room </button>
             <div>TODO: all the things</div>
           </div>

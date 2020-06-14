@@ -1,5 +1,5 @@
 import React from 'react';
-import {useRoutes} from 'hookrouter';
+import { useRoutes } from 'hookrouter';
 
 import Home from '../Home';
 import Game from '../Game';

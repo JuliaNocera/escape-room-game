@@ -10,7 +10,8 @@ export interface Room {
 
 export interface RoomContextProps {
   rooms: Room[];
-  currentRoom: number;
+  currentRoomIndex: number;
+  currentRoom: Room;
   goToRoom: (roomNumber: number) => void;
   nextRoom: () => void;
   prevRoom: () => void;
@@ -18,7 +19,12 @@ export interface RoomContextProps {
 
 export default createContext<RoomContextProps>({
   rooms: [],
-  currentRoom: 0,
+  currentRoomIndex: 0,
+  currentRoom: {
+    displayName: '', 
+    renderer: null, 
+    completed: false
+  },
   goToRoom: noop,
   nextRoom: noop,
   prevRoom: noop,

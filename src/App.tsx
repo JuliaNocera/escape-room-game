@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { A } from 'hookrouter';
 
 import "./App.css";
 
@@ -11,7 +12,7 @@ import { Room } from "./components/RoomContext";
 
 interface AppState {
   rooms: Room[];
-  currentRoom: number;
+  currentRoomIndex: number;
 }
 
 class App extends Component<{}, AppState> {
@@ -33,7 +34,7 @@ class App extends Component<{}, AppState> {
         renderer: <RoomThree />
       },
     ],
-    currentRoom: 0,
+    currentRoomIndex: 0,
   };
 
   // componentDidMount() {
@@ -41,35 +42,44 @@ class App extends Component<{}, AppState> {
   // temp: use state to track rooms and progress
   // }
 
-  setCurrentRoom = (currentRoom: number) => this.setState({ currentRoom });
+  setCurrentRoom = (currentRoomIndex: number) => this.setState({ currentRoomIndex });
 
   nextRoom = () => {
-    const { currentRoom } = this.state;
-    this.setCurrentRoom(currentRoom + 1);
+    const { currentRoomIndex, rooms } = this.state;
+    if (currentRoomIndex + 1 < rooms.length) {
+      this.setCurrentRoom(currentRoomIndex + 1);
+    }
   };
 
   previousRoom = () => {
-    const { currentRoom } = this.state;
-    this.setCurrentRoom(currentRoom - 1);
+    const { currentRoomIndex } = this.state;
+    if (currentRoomIndex - 1 >= 0) {
+      this.setCurrentRoom(currentRoomIndex - 1);
+    }
   };
 
-  goToRoom = (roomIndex: number) => this.setCurrentRoom(roomIndex);
+  goToRoom = (roomIndex: number) => {
+    const { rooms } = this.state;
+    if (roomIndex < rooms.length && roomIndex >= 0) {
+      this.setCurrentRoom(roomIndex) 
+    }
+  };
 
   render() {
-    const { currentRoom, rooms } = this.state;
+    const { currentRoomIndex, rooms } = this.state;
     return (
       <div className="App">
         <RoomProvider
           rooms={rooms}
-          currentRoom={currentRoom}
+          currentRoomIndex={currentRoomIndex}
           nextRoom={this.nextRoom}
           prevRoom={this.previousRoom}
           goToRoom={this.goToRoom}
         >
           <header className="App-header">
-            <span>Left</span>
-            <span>Center</span>
-            <span>Right</span>
+            <A href="/" className="App-nav-item">Home</A>
+            <A href="/game" className="App-nav-item">Game</A>
+            <span>Something Else</span>
           </header>
           <div className="App-body">
             <Routes />
