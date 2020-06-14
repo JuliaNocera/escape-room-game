@@ -1,0 +1,51 @@
+$button-primary-background: #066888;
+
+.Button {
+    display: inline-block;
+    border: none;
+    box-sizing: border-box;
+    border-radius: 0.5rem;
+
+    padding: 1rem 2rem;
+    margin: 0 0.5rem;
+
+    text-decoration: none;
+    font-family: sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+
+    transition: background 250ms ease-in-out,
+                transform 150ms ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    &-primary {
+      background: $button-primary-background;
+      color: #ffffff;
+
+      &:hover, 
+      &:focus {
+        background: darken($button-primary-background, 5%);
+      }
+    }
+
+    &-plain {
+      background: transparent;
+      color: #066888;
+
+      &:hover, 
+      &:focus {
+        background: lightgray;
+      }
+    }
+
+    &:focus {
+      outline: 1px solid #fff;
+      outline-offset: -4px;
+    }
+
+    &:active {
+      transform: scale(0.99);
+    }
+}

@@ -1,0 +1,36 @@
+.App {
+  text-align: center;
+  height: auto;
+}
+
+.App-header {
+  background-color: #282c34;
+  height: $appHeaderHeight;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  padding: 0.5rem;
+}
+
+.App-body {
+  padding: 0.5rem;
+  height: 100%;
+}
+
+.App-nav-item {
+  color: white;
+  text-decoration: none; 
+  background: transparent;
+  padding: 0.5rem;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

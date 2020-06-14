@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { A } from 'hookrouter';
 
-import "./App.css";
+import './styles.scss';
 
 import RoomProvider from "./components/RoomProvider";
 import Routes from './components/Routes';
