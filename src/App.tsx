@@ -3,6 +3,10 @@ import React, { Component } from "react";
 import "./App.css";
 
 import RoomProvider from "./components/RoomProvider";
+import Routes from './components/Routes';
+import RoomOne from './components/RoomOne';
+import RoomTwo from './components/RoomTwo';
+import RoomThree from './components/RoomThree';
 import { Room } from "./components/RoomContext";
 
 interface AppState {
@@ -16,14 +20,17 @@ class App extends Component<{}, AppState> {
       {
         displayName: "Room one",
         completed: false,
+        renderer: <RoomOne />
       },
       {
         displayName: "Room two",
         completed: false,
+        renderer: <RoomTwo />
       },
       {
         displayName: "Room three",
         completed: false,
+        renderer: <RoomThree />
       },
     ],
     currentRoom: 0,
@@ -64,7 +71,9 @@ class App extends Component<{}, AppState> {
             <span>Center</span>
             <span>Right</span>
           </header>
-          <div className="</RoomProvider>App-body">Body</div>
+          <div className="App-body">
+            <Routes />
+          </div>
         </RoomProvider>
       </div>
     );

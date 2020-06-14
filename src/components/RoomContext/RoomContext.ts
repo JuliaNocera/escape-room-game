@@ -1,10 +1,11 @@
-import { createContext } from "react";
+import { createContext, ReactNode } from "react";
 
 const noop = () => {};
 
 export interface Room {
   completed: boolean;
   displayName: string;
+  renderer: ReactNode;
 }
 
 export interface RoomContextProps {

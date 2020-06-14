@@ -1,6 +1,13 @@
 import React from "react";
 
-import RoomProvider from "../RoomProvider";
-import RoomOne from "../RoomOne";
+import RoomContext from "../RoomContext";
 
-const RoomRenderer = () => {};
+const RoomRenderer = () => (
+  <RoomContext.Consumer>
+    {({rooms, currentRoom}) => (
+    <> {rooms[currentRoom].renderer}</>
+    )}
+  </RoomContext.Consumer>
+);
+
+export default RoomRenderer;
