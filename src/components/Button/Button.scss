@@ -5,13 +5,10 @@ $button-primary-background: #066888;
     border: none;
     box-sizing: border-box;
     border-radius: 0.5rem;
-
-    padding: 1rem 2rem;
     margin: 0 0.5rem;
 
     text-decoration: none;
     font-family: sans-serif;
-    font-size: 1rem;
     cursor: pointer;
     text-align: center;
 
@@ -19,6 +16,22 @@ $button-primary-background: #066888;
                 transform 150ms ease;
     -webkit-appearance: none;
     -moz-appearance: none;
+
+    &-large {
+      padding: 1rem 2rem;
+      font-size: 1rem;
+    }
+
+    &-medium,
+    &-small {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+
+    &-small {
+      padding: 0.5rem;
+    }
+
 
     &-primary {
       background: $button-primary-background;
