@@ -1,78 +1,25 @@
-import React, { Component } from "react";
+import React from "react";
 import { A } from 'hookrouter';
 
 import './styles.scss';
 
 import RoomProvider from "./components/RoomProvider";
+import Button from './components/Button';
 import Routes from './components/Routes';
-import { RoomOne, RoomTwo, RoomThree } from './components/Rooms';
-import { Room } from "./components/RoomContext";
+import INITIAL_ROOMS_STATE from './lib/constants/rooms';
+import useRoomState from "./hooks/useRoomState";
 
-interface AppState {
-  rooms: Room[];
-  currentRoomIndex: number;
-}
+const App = () => {
+    const { currentRoomIndex, goToRoom, nextRoom, previousRoom, rooms } = useRoomState(INITIAL_ROOMS_STATE)
 
-class App extends Component<{}, AppState> {
-  state: AppState = {
-    rooms: [
-      {
-        displayName: "Room one",
-        completed: false,
-        renderer: <RoomOne />
-      },
-      {
-        displayName: "Room two",
-        completed: false,
-        renderer: <RoomTwo />
-      },
-      {
-        displayName: "Room three",
-        completed: false,
-        renderer: <RoomThree />
-      },
-    ],
-    currentRoomIndex: 0,
-  };
-
-  // componentDidMount() {
-  // Long Term Todo: query param key to firebase & routing
-  // temp: use state to track rooms and progress
-  // }
-
-  setCurrentRoom = (currentRoomIndex: number) => this.setState({ currentRoomIndex });
-
-  nextRoom = () => {
-    const { currentRoomIndex, rooms } = this.state;
-    if (currentRoomIndex + 1 < rooms.length) {
-      this.setCurrentRoom(currentRoomIndex + 1);
-    }
-  };
-
-  previousRoom = () => {
-    const { currentRoomIndex } = this.state;
-    if (currentRoomIndex - 1 >= 0) {
-      this.setCurrentRoom(currentRoomIndex - 1);
-    }
-  };
-
-  goToRoom = (roomIndex: number) => {
-    const { rooms } = this.state;
-    if (roomIndex < rooms.length && roomIndex >= 0) {
-      this.setCurrentRoom(roomIndex) 
-    }
-  };
-
-  render() {
-    const { currentRoomIndex, rooms } = this.state;
     return (
       <div className="App">
         <RoomProvider
           rooms={rooms}
           currentRoomIndex={currentRoomIndex}
-          nextRoom={this.nextRoom}
-          prevRoom={this.previousRoom}
-          goToRoom={this.goToRoom}
+          nextRoom={nextRoom}
+          prevRoom={previousRoom}
+          goToRoom={goToRoom}
         >
           <header className="App-header">
             <A href="/" className="App-nav-item">Home</A>
@@ -80,12 +27,14 @@ class App extends Component<{}, AppState> {
             <span>Something Else</span>
           </header>
           <div className="App-body">
+            <Button onClick={() => goToRoom(0)}>First Room</Button>
+            <Button onClick={() => goToRoom(1)}>Second Room</Button>
+            <Button onClick={() => goToRoom(2)}>Third Room</Button>
             <Routes />
           </div>
         </RoomProvider>
       </div>
-    );
-  }
+    )
 }
 
 export default App;
