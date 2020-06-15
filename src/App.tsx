@@ -5,9 +5,7 @@ import './styles.scss';
 
 import RoomProvider from "./components/RoomProvider";
 import Routes from './components/Routes';
-import RoomOne from './components/RoomOne';
-import RoomTwo from './components/RoomTwo';
-import RoomThree from './components/RoomThree';
+import { RoomOne, RoomTwo, RoomThree } from './components/Rooms';
 import { Room } from "./components/RoomContext";
 
 interface AppState {
