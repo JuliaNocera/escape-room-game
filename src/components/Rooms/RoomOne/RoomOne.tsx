@@ -15,9 +15,10 @@ const RoomOne = () => {
       {({currentRoom, nextRoom}) => (
         <div>
           <h1>{currentRoom.displayName}</h1>
-          <Button onClick={nextRoom} > Next Room </Button>
+          <Button size={Button.SIZE.SMALL} onClick={nextRoom} > Next Room </Button>
           <Button
             type={Button.TYPE.PLAIN}
+            size={Button.SIZE.SMALL}
             onClick={() => setIsOpen(true)}
           >
             Show Modal

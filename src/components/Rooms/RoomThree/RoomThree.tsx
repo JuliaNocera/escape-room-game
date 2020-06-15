@@ -16,8 +16,14 @@ const RoomThree = () => {
         return (
           <div>
             <h1>{currentRoom.displayName}</h1>
-            <Button onClick={nextRoom} > Next Room </Button>
             <Button
+              size={Button.SIZE.SMALL}
+              onClick={nextRoom}
+            >
+              Next Room
+            </Button>
+            <Button
+              size={Button.SIZE.SMALL}
               type={Button.TYPE.PLAIN}
               onClick={() => setIsOpen(true)}
             >
