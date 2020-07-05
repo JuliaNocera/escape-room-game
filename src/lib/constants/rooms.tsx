@@ -1,26 +1,23 @@
-import React from 'react';
+import React from 'react'
 
-import { RoomState } from '../../hooks/useRoomState';
-import { RoomOne, RoomTwo, RoomThree } from '../../components/Rooms';
+import { RoomState } from '../../hooks/useRoomState'
+import { RoomOne, RoomTwo, RoomThree } from '../../components/Rooms'
 
-const INITIAL_ROOMS_STATE: RoomState =  {
+const INITIAL_ROOMS_STATE: RoomState = {
   rooms: [
     {
-      displayName: "Room one",
+      displayName: 'Room one',
       completed: false,
-      renderer: <RoomOne />
     },
     {
-      displayName: "Room two",
+      displayName: 'Room two',
       completed: false,
-      renderer: <RoomTwo />
     },
     {
-      displayName: "Room three",
+      displayName: 'Room three',
       completed: false,
-      renderer: <RoomThree />
     },
   ],
-  currentRoomIndex: 0
+  currentRoomIndex: 0,
 }
-export default INITIAL_ROOMS_STATE;
+export default INITIAL_ROOMS_STATE

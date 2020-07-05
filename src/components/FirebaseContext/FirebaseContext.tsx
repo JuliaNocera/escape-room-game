@@ -1,3 +1,3 @@
-import React, { createContext } from 'react'
+import { createContext } from 'react'
 
-export default createContext({ database: {} as firebase.database.Database })
+export default createContext({ fb: {} as firebase.app.App })
