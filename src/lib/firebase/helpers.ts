@@ -1,5 +1,15 @@
 type Database = firebase.database.Database
 
+export const cancelGameListener = ({
+  db,
+  name,
+}: {
+  db: Database
+  name: string
+}) => {
+  db.ref(`games/${name}`).off()
+}
+
 export const gameListener = async ({
   db,
   name,

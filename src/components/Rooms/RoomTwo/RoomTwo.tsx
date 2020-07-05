@@ -1,24 +1,28 @@
-import React from "react";
+import React from 'react'
 
-import Button from '../../Button';
-import Modal from '../../Modal';
-import PuzzleContainer from '../../PuzzleContainer';
-import RoomContext from '../../RoomContext';
-import useModalState from '../../../hooks/useModalState';
+import Button from '../../Button'
+import Modal from '../../Modal'
+import PuzzleContainer from '../../PuzzleContainer'
+import RoomContext from '../../RoomContext'
+import useModalState from '../../../hooks/useModalState'
 
 const RoomTwo = () => {
-
   const { isOpen, setIsOpen } = useModalState()
 
   return (
     <RoomContext.Consumer>
-      {({ currentRoom, nextRoom }) => {
+      {({ currentRoomIndex, rooms, nextRoom, prevRoom }) => {
         return (
           <div>
-            <h1>{currentRoom.displayName}</h1>
-            <Button
-              size={Button.SIZE.SMALL}
-              onClick={nextRoom} > Next Room </Button>
+            <h1>{rooms[currentRoomIndex].displayName}</h1>
+            <Button size={Button.SIZE.SMALL} onClick={prevRoom}>
+              {' '}
+              Previous Room{' '}
+            </Button>
+            <Button size={Button.SIZE.SMALL} onClick={nextRoom}>
+              {' '}
+              Next Room{' '}
+            </Button>
             <Button
               size={Button.SIZE.SMALL}
               type={Button.TYPE.PLAIN}
@@ -28,13 +32,15 @@ const RoomTwo = () => {
             </Button>
             <div>TODO: all the things</div>
             <Modal open={isOpen} onClose={() => setIsOpen(false)}>
-              <PuzzleContainer><h1>Hello Puzzle Room 2</h1></PuzzleContainer>
+              <PuzzleContainer>
+                <h1>Hello Puzzle Room 2</h1>
+              </PuzzleContainer>
             </Modal>
           </div>
-        )      
+        )
       }}
     </RoomContext.Consumer>
-  );
-};
+  )
+}
 
-export default RoomTwo;
+export default RoomTwo

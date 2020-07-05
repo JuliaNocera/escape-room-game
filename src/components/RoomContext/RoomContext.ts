@@ -5,27 +5,25 @@ const noop = () => {}
 export interface Room {
   completed: boolean
   displayName: string
-  renderer?: ReactNode
+  renderer: ReactNode
 }
 
 export interface RoomContextProps {
   rooms: Room[]
   currentRoomIndex: number
-  currentRoom: Room
+  completeRoom: (roomIndex: number) => void
   goToRoom: (roomNumber: number) => void
   nextRoom: () => void
   prevRoom: () => void
+  loading: boolean
 }
 
 export default createContext<RoomContextProps>({
   rooms: [],
   currentRoomIndex: 0,
-  currentRoom: {
-    displayName: '',
-    renderer: null,
-    completed: false,
-  },
+  completeRoom: noop,
   goToRoom: noop,
   nextRoom: noop,
   prevRoom: noop,
+  loading: true,
 })

@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
 
 import RoomRenderer from '../RoomRenderer'
-import { Room } from '../RoomContext/RoomContext'
-import { gameListener, completeRoom } from '../../lib/firebase/helpers'
+import RoomContext, { Room } from '../RoomContext'
+import {
+  gameListener,
+  completeRoom,
+  cancelGameListener,
+} from '../../lib/firebase/helpers'
 import FirebaseContext from '../FirebaseContext'
 
 export interface GameSettings {
@@ -13,6 +17,7 @@ interface GameState {
   settings: GameSettings
   rooms: Room[]
   currentRoomIndex: number
+  loading: boolean
 }
 
 class Game extends Component<{}, GameState> {
@@ -22,17 +27,25 @@ class Game extends Component<{}, GameState> {
     settings: {},
     rooms: [],
     currentRoomIndex: 0,
+    loading: true,
   }
 
   async componentDidMount() {
     const { fb } = this.context
     const db = fb.database()
-    const game = await gameListener({
-      db,
-      name: 'test',
-      onUpdate: this.onUpdate,
+    this.setState({ loading: true }, () => {
+      gameListener({
+        db,
+        name: 'test',
+        onUpdate: this.onUpdate,
+      })
     })
-    console.log(game)
+  }
+
+  componentWillUnmount() {
+    const { fb } = this.context
+    const db = fb.database()
+    cancelGameListener({ db, name: 'test' })
   }
 
   getCurrentRoom = (rooms: Room[]) => {
@@ -45,11 +58,32 @@ class Game extends Component<{}, GameState> {
     return currentRoomIndex
   }
 
-  nextRoom = () => {
-    const { currentRoomIndex } = this.state
+  completeRoom = (roomIndex: number) => {
     const { fb } = this.context
     const db = fb.database()
-    completeRoom({ db, roomName: 'test', roomIndex: currentRoomIndex })
+    completeRoom({ db, roomName: 'test', roomIndex })
+  }
+
+  goToRoom = (roomIndex: number) => {
+    this.setState({ currentRoomIndex: roomIndex })
+  }
+
+  nextRoom = () => {
+    const { currentRoomIndex, rooms } = this.state
+    if (currentRoomIndex + 1 <= rooms.length - 1) {
+      this.setState({
+        currentRoomIndex: currentRoomIndex + 1,
+      })
+    }
+  }
+
+  prevRoom = () => {
+    const { currentRoomIndex } = this.state
+    if (currentRoomIndex - 1 >= 0) {
+      this.setState({
+        currentRoomIndex: currentRoomIndex - 1,
+      })
+    }
   }
 
   onUpdate = (game: firebase.database.DataSnapshot) => {
@@ -57,11 +91,28 @@ class Game extends Component<{}, GameState> {
     this.setState({
       rooms: gameValue.rooms,
       currentRoomIndex: this.getCurrentRoom(gameValue.rooms),
+      loading: false,
     })
   }
 
   render() {
-    return <RoomRenderer />
+    const { rooms, currentRoomIndex, loading } = this.state
+
+    const roomContextValue = {
+      rooms,
+      currentRoomIndex,
+      completeRoom: this.completeRoom,
+      goToRoom: this.goToRoom,
+      nextRoom: this.nextRoom,
+      prevRoom: this.prevRoom,
+      loading,
+    }
+
+    return (
+      <RoomContext.Provider value={roomContextValue}>
+        <RoomRenderer />
+      </RoomContext.Provider>
+    )
   }
 }
 export default Game

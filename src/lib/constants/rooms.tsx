@@ -1,9 +1,4 @@
-import React from 'react'
-
-import { RoomState } from '../../hooks/useRoomState'
-import { RoomOne, RoomTwo, RoomThree } from '../../components/Rooms'
-
-const INITIAL_ROOMS_STATE: RoomState = {
+const INITIAL_ROOMS_STATE: any = {
   rooms: [
     {
       displayName: 'Room one',
