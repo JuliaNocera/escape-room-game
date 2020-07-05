@@ -1,0 +1,29 @@
+/* colors */
+$brand: #487ba6;
+
+$surface-color: mix(black, $brand);
+$surface-1: lighten($surface-color, 5%);
+$surface-2: lighten($surface-color, 7%);
+$surface-3: lighten($surface-color, 8%);
+$surface-4: lighten($surface-color, 9%);
+$surface-5: lighten($surface-color, 11%);
+$surface-6: lighten($surface-color, 12%);
+$surface-7: lighten($surface-color, 14%);
+$surface-8: lighten($surface-color, 15%);
+$surface-9: lighten($surface-color, 16%);
+
+$brand-peach: #ffabb8;
+$brand-dark-peach: #bd84a4;
+$brand-plum: #9898bc;
+
+/* sizing */
+$app-header-height: 2rem;
+
+/* 
+Brand Palette
+
+#ffabb8
+#bd84a4
+#9898bc
+#487ba6
+*/

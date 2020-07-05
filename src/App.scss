@@ -1,29 +1,31 @@
 .App {
   text-align: center;
-  height: auto;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: $surface-color;
+  color: $brand-peach;
 }
 
 .App-header {
-  background-color: #282c34;
-  height: $appHeaderHeight;
+  background-color: $surface-2;
+  height: $app-header-height;
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: calc(10px + 2vmin);
-  color: white;
-  padding: 0.5rem;
+  padding: 1rem;
 }
 
 .App-body {
-  padding: 0.5rem;
   height: 100%;
+  padding: 1rem;
 }
 
 .App-nav-item {
-  color: white;
-  text-decoration: none; 
+  color: $brand-plum;
+  text-decoration: none;
   background: transparent;
-  padding: 0.5rem;
 }
 
 @keyframes App-logo-spin {
