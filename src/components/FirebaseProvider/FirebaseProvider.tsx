@@ -4,14 +4,14 @@ import FirebaseContext from '../FirebaseContext'
 import INITIAL_ROOMS_STATE from '../../lib/constants/rooms'
 import { GameSettings } from '../Game/Game'
 
+interface CreateGameParams {
+  name: string
+  settings?: GameSettings
+  onFinish?: (name: string) => void
+}
+
 export interface FirebaseProviderReturnProps {
-  createNewGame: ({
-    name,
-    settings,
-  }: {
-    name: string
-    settings?: GameSettings
-  }) => void
+  createNewGame: CreateGameParams
   // isGameNameValid: (name: string) => Boolean
   [key: string]: any
   database: firebase.database.Database
@@ -25,31 +25,44 @@ const FirebaseProvider = ({ children }: PropsWithChildren<{}>) => (
   <FirebaseContext.Consumer>
     {({ fb }) => {
       const database = fb.database()
+
       const createNewGame = ({
         name,
         settings = defaultGameSettings,
-      }: {
-        name: string
-        settings?: GameSettings
-      }) => {
+        onFinish,
+      }: CreateGameParams) => {
         // TODO: sanitize user input
-        database.ref(`games/${name}`).set({
-          created_at: Date.now(),
-          settings,
-          rooms: INITIAL_ROOMS_STATE.rooms,
-        })
+        const onComplete = (a?: Error | null) => {
+          if (a) {
+            throw a
+          } else if (onFinish) {
+            onFinish(name)
+          }
+          return
+        }
+
+        database.ref(`games/${name}`).set(
+          {
+            created_at: Date.now(),
+            settings,
+            rooms: INITIAL_ROOMS_STATE.rooms,
+          },
+          onComplete
+        )
       }
 
       const isGameNameValid = async (name: string) => {
         const snapshot = await database.ref(`games/`).once('value')
-        const value = await snapshot.val()
-        return Boolean(value[name])
+        const value = snapshot.val()
+        if (value?.[name]) {
+          return false
+        }
+        return true
       }
 
       const getGame = async (name: string) => {
         const snapshot = await database.ref(`games/${name}`).once('value')
         const value = await snapshot.val()
-        console.log({ value })
 
         return Promise.resolve(value)
       }

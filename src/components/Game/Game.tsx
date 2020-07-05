@@ -13,14 +13,19 @@ export interface GameSettings {
   timer?: boolean
 }
 
+interface GameProps {
+  gameId?: string
+}
+
 interface GameState {
   settings: GameSettings
   rooms: Room[]
   currentRoomIndex: number
   loading: boolean
+  gameFound: boolean
 }
 
-class Game extends Component<{}, GameState> {
+class Game extends Component<GameProps, GameState> {
   static contextType = FirebaseContext
 
   state: GameState = {
@@ -28,18 +33,24 @@ class Game extends Component<{}, GameState> {
     rooms: [],
     currentRoomIndex: 0,
     loading: true,
+    gameFound: true,
   }
 
   async componentDidMount() {
     const { fb } = this.context
+    const { gameId } = this.props
     const db = fb.database()
-    this.setState({ loading: true }, () => {
-      gameListener({
-        db,
-        name: 'test',
-        onUpdate: this.onUpdate,
+    if (gameId) {
+      this.setState({ loading: true }, () => {
+        gameListener({
+          db,
+          name: gameId,
+          onUpdate: this.onUpdate,
+        })
       })
-    })
+    } else {
+      this.setState({ gameFound: false, loading: false })
+    }
   }
 
   componentWillUnmount() {
@@ -49,6 +60,8 @@ class Game extends Component<{}, GameState> {
   }
 
   getCurrentRoom = (rooms: Room[]) => {
+    // TODO: this shouldn't be determined by completed now that it is in state
+    // it should always be currentState
     let currentRoomIndex = 0
     rooms.forEach((room, index) => {
       if (!room.completed) {
@@ -90,13 +103,12 @@ class Game extends Component<{}, GameState> {
     const gameValue = game.val()
     this.setState({
       rooms: gameValue.rooms,
-      currentRoomIndex: this.getCurrentRoom(gameValue.rooms),
       loading: false,
     })
   }
 
   render() {
-    const { rooms, currentRoomIndex, loading } = this.state
+    const { rooms, currentRoomIndex, loading, gameFound } = this.state
 
     const roomContextValue = {
       rooms,
@@ -106,6 +118,10 @@ class Game extends Component<{}, GameState> {
       nextRoom: this.nextRoom,
       prevRoom: this.prevRoom,
       loading,
+    }
+
+    if (!loading && !gameFound) {
+      return <div>No Game Found</div>
     }
 
     return (

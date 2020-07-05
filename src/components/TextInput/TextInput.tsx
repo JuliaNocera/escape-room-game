@@ -12,24 +12,27 @@ const TextInput: FC<TextInputProps> = ({
   onEnter,
   placeholderText = 'Game Name',
 }) => {
-  const { currentText, onChange } = useTextInput()
-  // TODO: sanitize input
+  const { currentText, onTextChange } = useTextInput()
 
   const handleChange = (event: any) => {
     if (validate) {
-      // TODO: visualize validation errors
       validate(event.currentTarget.value)
     }
-    onChange(event.currentTarget.value)
+    onTextChange(event.currentTarget.value)
   }
 
   const submitEnabled = currentText.length > 0
+
+  const onSubmit = (currentText: string) => {
+    onEnter(currentText)
+    onTextChange('')
+  }
 
   return (
     <form
       onSubmit={(event: any) => {
         event.preventDefault()
-        onEnter(currentText)
+        onSubmit(currentText)
       }}
     >
       <input
