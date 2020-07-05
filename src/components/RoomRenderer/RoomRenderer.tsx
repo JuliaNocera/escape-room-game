@@ -12,7 +12,6 @@ const RoomRenderer = () => (
       if (loading) {
         return <div>....Loading</div>
       }
-      console.log({ currentRoomIndex })
       return (
         <>
           <Button
