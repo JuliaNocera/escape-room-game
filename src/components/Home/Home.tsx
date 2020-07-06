@@ -7,14 +7,24 @@ import FirebaseProvider, {
   GameNameExistsFunc,
 } from '../FirebaseProvider'
 import TextInput from '../TextInput'
+import InvalidInputMessage from './InvalidInputMessage'
+
+import { DefaultSubmitDisabledState } from './types'
 import {
   findUnacceptableCharsForGameName,
   encodeString,
   trimSpaces,
 } from '../../lib/textHelpers'
 
+const defaultSubmitDisabledState = {
+  isDisabled: false,
+  invalidChars: [],
+}
+
 const Home: FC<{}> = () => {
-  const [invalidChars, updateInvalidChars] = useState([] as string[])
+  const [submitDisabled, updateSubmitDisabled] = useState(
+    defaultSubmitDisabledState as DefaultSubmitDisabledState
+  )
   const onFinishCallback = (name: string) => {
     const encodedName = encodeString(name)
     navigate(`/game/${encodedName}`)
@@ -34,18 +44,25 @@ const Home: FC<{}> = () => {
         console.log({ e })
       }
     } else {
-      // update to useState
-      throw new Error('Invalid game name, already exists')
+      updateSubmitDisabled({
+        isDisabled: true,
+        disabledReason: `A game with this name already exists: ${trimmedName}`,
+        invalidChars: submitDisabled.invalidChars,
+      })
     }
   }
 
-  const isValidInput = (input: string) => {
+  const validateInput = (input: string) => {
     const matches = findUnacceptableCharsForGameName(input)
     if (matches !== null) {
-      updateInvalidChars(matches)
+      updateSubmitDisabled({
+        isDisabled: true,
+        disabledReason: 'Invalid characters in the game name: ',
+        invalidChars: matches,
+      })
       return false
     }
-    updateInvalidChars([])
+    updateSubmitDisabled({ isDisabled: false, invalidChars: [] })
     return true
   }
 
@@ -55,11 +72,14 @@ const Home: FC<{}> = () => {
         return (
           <div>
             <h1>Home</h1>
+            <InvalidInputMessage submitDisabled={submitDisabled} />
             <TextInput
               onEnter={(value: string) =>
                 handleTextSubmit(value, createNewGame, gameNameExists)
               }
-              isValidInput={isValidInput}
+              disabled={submitDisabled.isDisabled}
+              validateInput={validateInput}
+              autoFocus
             />
           </div>
         )
