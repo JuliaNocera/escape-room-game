@@ -2,23 +2,29 @@ import React, { FC } from 'react'
 import useTextInput from '../../hooks/useTextInput'
 
 interface TextInputProps {
-  validate?: (input: string) => void
+  isValidInput?: (input: string) => boolean
   onEnter: (input: string) => void
   placeholderText?: string
 }
 
 const TextInput: FC<TextInputProps> = ({
-  validate,
+  isValidInput,
   onEnter,
   placeholderText = 'Game Name',
 }) => {
   const { currentText, onTextChange } = useTextInput()
 
   const handleChange = (event: any) => {
-    if (validate) {
-      validate(event.currentTarget.value)
+    if (isValidInput) {
+      const isValid = isValidInput(event.currentTarget.value)
+      if (isValid) {
+        onTextChange(event.currentTarget.value)
+      } else {
+        return
+      }
+    } else {
+      onTextChange(event.currentTarget.value)
     }
-    onTextChange(event.currentTarget.value)
   }
 
   const submitEnabled = currentText.length > 0
