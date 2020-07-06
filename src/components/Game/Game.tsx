@@ -43,7 +43,7 @@ class Game extends Component<GameProps, GameState> {
     const { gameId } = this.props
     const db = fb.database()
     if (gameId) {
-      this.setState({ loading: true }, () => {
+      this.setState({ loading: true, gameFound: true }, () => {
         gameListener({
           db,
           name: gameId,
@@ -103,14 +103,14 @@ class Game extends Component<GameProps, GameState> {
 
   onUpdate = (game: firebase.database.DataSnapshot) => {
     const gameValue = game.val()
-    if (gameValue) {
-      this.setState({
-        rooms: gameValue.rooms,
-        loading: false,
-        gameFound: true,
-      })
+    if (!gameValue) {
+      this.setState({ gameFound: false, loading: false })
     }
-    this.setState({ gameFound: false, loading: false })
+    this.setState({
+      rooms: gameValue.rooms,
+      loading: false,
+      gameFound: true,
+    })
   }
 
   render() {
