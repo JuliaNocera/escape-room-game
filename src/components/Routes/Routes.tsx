@@ -3,6 +3,7 @@ import { useRoutes } from 'hookrouter'
 
 import Home from '../Home'
 import Game from '../Game'
+import { decodeString } from '../../lib/textHelpers'
 
 type FixMe = any
 
@@ -10,7 +11,10 @@ type FixMe = any
 const routePaths = {
   '/': () => <Home />,
   '/game': () => <Game />,
-  '/game/:id': ({ id }: FixMe) => <Game gameId={id} />,
+  '/game/:id': ({ id }: FixMe) => {
+    const decodedGameId = decodeString(id)
+    return <Game gameId={decodedGameId} />
+  },
 }
 
 const Routes = () => {
