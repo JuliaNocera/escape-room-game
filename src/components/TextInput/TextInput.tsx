@@ -2,36 +2,36 @@ import React, { FC } from 'react'
 import useTextInput from '../../hooks/useTextInput'
 
 interface TextInputProps {
-  isValidInput?: (input: string) => boolean
+  validateInput?: (input: string) => boolean
   onEnter: (input: string) => void
+  disabled?: boolean
   placeholderText?: string
+  autoFocus?: boolean
 }
 
 const TextInput: FC<TextInputProps> = ({
-  isValidInput,
+  validateInput,
   onEnter,
+  disabled = false,
   placeholderText = 'Game Name',
+  autoFocus = false,
 }) => {
   const { currentText, onTextChange } = useTextInput()
 
   const handleChange = (event: any) => {
-    if (isValidInput) {
-      const isValid = isValidInput(event.currentTarget.value)
-      if (isValid) {
-        onTextChange(event.currentTarget.value)
-      } else {
-        return
-      }
-    } else {
-      onTextChange(event.currentTarget.value)
+    if (validateInput) {
+      validateInput(event.currentTarget.value)
     }
+    onTextChange(event.currentTarget.value)
   }
+
+  const clearInput = () => onTextChange('')
 
   const submitEnabled = currentText.length > 0
 
   const onSubmit = (currentText: string) => {
     onEnter(currentText)
-    onTextChange('')
+    clearInput()
   }
 
   return (
@@ -46,8 +46,13 @@ const TextInput: FC<TextInputProps> = ({
         value={currentText}
         onChange={handleChange}
         placeholder={placeholderText}
+        autoFocus={autoFocus}
       />
-      <input type="submit" value="Submit" disabled={!submitEnabled} />
+      <input
+        type="submit"
+        value="Submit"
+        disabled={!submitEnabled || disabled}
+      />
     </form>
   )
 }
