@@ -1,24 +1,35 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { navigate } from 'hookrouter'
 
-import FirebaseProvider from '../FirebaseProvider'
-import { FirebaseProviderReturnProps } from '../FirebaseProvider/FirebaseProvider'
+import FirebaseProvider, {
+  FirebaseProviderReturnProps,
+  CreateGameNameFunc,
+  GameNameExistsFunc,
+} from '../FirebaseProvider'
 import TextInput from '../TextInput'
-
-type FixMe = any
+import {
+  findUnacceptableCharsForGameName,
+  encodeString,
+  trimSpaces,
+} from '../../lib/textHelpers'
 
 const Home: FC<{}> = () => {
-  const onFinishCallback = (name: string) => navigate(`/game/${name}`)
+  const [invalidChars, updateInvalidChars] = useState([] as string[])
+  const onFinishCallback = (name: string) => {
+    const encodedName = encodeString(name)
+    navigate(`/game/${encodedName}`)
+  }
 
   const handleTextSubmit = async (
     value: string,
-    createNewGame: FixMe,
-    isGameNameValid: FixMe
+    createNewGame: CreateGameNameFunc,
+    gameNameExists: GameNameExistsFunc
   ) => {
-    const isValid = await isGameNameValid({ name: value })
-    if (isValid) {
+    const trimmedName = trimSpaces(value)
+    const nameExists = await gameNameExists(trimmedName)
+    if (!nameExists) {
       try {
-        createNewGame({ name: value, onFinish: onFinishCallback })
+        createNewGame({ name: trimmedName, onFinish: onFinishCallback })
       } catch (e) {
         console.log({ e })
       }
@@ -28,16 +39,27 @@ const Home: FC<{}> = () => {
     }
   }
 
+  const isValidInput = (input: string) => {
+    const matches = findUnacceptableCharsForGameName(input)
+    if (matches !== null) {
+      updateInvalidChars(matches)
+      return false
+    }
+    updateInvalidChars([])
+    return true
+  }
+
   return (
     <FirebaseProvider>
-      {({ createNewGame, isGameNameValid }: FirebaseProviderReturnProps) => {
+      {({ createNewGame, gameNameExists }: FirebaseProviderReturnProps) => {
         return (
           <div>
             <h1>Home</h1>
             <TextInput
               onEnter={(value: string) =>
-                handleTextSubmit(value, createNewGame, isGameNameValid)
+                handleTextSubmit(value, createNewGame, gameNameExists)
               }
+              isValidInput={isValidInput}
             />
           </div>
         )

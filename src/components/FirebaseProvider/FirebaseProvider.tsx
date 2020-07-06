@@ -2,20 +2,7 @@ import React, { PropsWithChildren } from 'react'
 
 import FirebaseContext from '../FirebaseContext'
 import INITIAL_ROOMS_STATE from '../../lib/constants/rooms'
-import { GameSettings } from '../Game/Game'
-
-interface CreateGameParams {
-  name: string
-  settings?: GameSettings
-  onFinish?: (name: string) => void
-}
-
-export interface FirebaseProviderReturnProps {
-  createNewGame: CreateGameParams
-  // isGameNameValid: (name: string) => Boolean
-  [key: string]: any
-  database: firebase.database.Database
-}
+import { CreateGameParams, FirebaseProviderReturnProps } from './types'
 
 const defaultGameSettings = {
   timer: false,
@@ -51,13 +38,13 @@ const FirebaseProvider = ({ children }: PropsWithChildren<{}>) => (
         )
       }
 
-      const isGameNameValid = async (name: string) => {
+      const gameNameExists = async (name: string) => {
         const snapshot = await database.ref(`games/`).once('value')
         const value = snapshot.val()
         if (value?.[name]) {
-          return false
+          return true
         }
-        return true
+        return false
       }
 
       const getGame = async (name: string) => {
@@ -70,7 +57,7 @@ const FirebaseProvider = ({ children }: PropsWithChildren<{}>) => (
       if (typeof children === 'function') {
         return children({
           database,
-          isGameNameValid,
+          gameNameExists,
           createNewGame,
           getGame,
         } as FirebaseProviderReturnProps)
