@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 
 import RoomRenderer from '../RoomRenderer'
+import NoGameFound from './NoGameFound'
 import RoomContext, { Room } from '../RoomContext'
+
 import {
   gameListener,
   completeRoom,
@@ -101,10 +103,14 @@ class Game extends Component<GameProps, GameState> {
 
   onUpdate = (game: firebase.database.DataSnapshot) => {
     const gameValue = game.val()
-    this.setState({
-      rooms: gameValue.rooms,
-      loading: false,
-    })
+    if (gameValue) {
+      this.setState({
+        rooms: gameValue.rooms,
+        loading: false,
+        gameFound: true,
+      })
+    }
+    this.setState({ gameFound: false, loading: false })
   }
 
   render() {
@@ -121,7 +127,7 @@ class Game extends Component<GameProps, GameState> {
     }
 
     if (!loading && !gameFound) {
-      return <div>No Game Found</div>
+      return <NoGameFound />
     }
 
     return (

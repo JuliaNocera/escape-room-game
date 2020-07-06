@@ -1,0 +1,7 @@
+.NoGameFound-Link {
+  color: $link-text;
+  text-decoration: none;
+  &:hover {
+    color: lighten($link-text, 30%);
+  }
+}
