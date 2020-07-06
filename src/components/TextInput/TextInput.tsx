@@ -19,9 +19,7 @@ const TextInput: FC<TextInputProps> = ({
   const { currentText, onTextChange } = useTextInput()
 
   const handleChange = (event: any) => {
-    if (validateInput) {
-      validateInput(event.currentTarget.value)
-    }
+    validateInput && validateInput(event.currentTarget.value)
     onTextChange(event.currentTarget.value)
   }
 
